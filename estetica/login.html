@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Estetica</title>
+  <link rel="icon" href="https://cdn-icons-png.freepik.com/512/1419/1419153.png" type="image/png">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #ffd6e8; /* Rosa pastel */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 320px;
+      position: relative;
+    }
+
+    .container img.logo {
+      width: 80px;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      background-color: #ff85a2;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      margin-top: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #ff5c87;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .google-btn {
+      background-color: white;
+      color: #444;
+      border: 1px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px;
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    .google-btn img {
+      width: 18px;
+      height: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Registro -->
+<div class="container" id="register">
+  <img src="logo.png" alt="Logo" class="logo" />
+  <h2>Crear Cuenta</h2>
+  <input type="text" id="reg-username" placeholder="Nombre de usuario" />
+  <input type="email" id="reg-email" placeholder="Correo Gmail" />
+  <input type="password" id="reg-password" placeholder="Contraseña" />
+  <button onclick="register()">Registrarse</button>
+  <p style="margin-top: 15px;">
+    ¿Ya tienes cuenta? 
+    <a href="#" onclick="showLogin()" style="color: #ff5c87; font-weight: bold; text-decoration: none;">Inicia sesión aquí</a>
+  </p>
+</div>
+
+
+<!-- Inicio de sesión -->
+<div class="container hidden" id="login">
+  <img src="logo.png" alt="Logo" class="logo" />
+  <h2>Iniciar Sesión</h2>
+  <input type="text" id="login-username" placeholder="Usuario" />
+  <input type="password" id="login-password" placeholder="Contraseña" />
+  <button onclick="login()">Entrar</button>
+  <button class="google-btn" onclick="googleLogin()">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png" alt="Google logo" />
+    Iniciar con Google
+  </button>
+</div>
+
+<script>
+  let savedUser = {};
+  
+  function register() {
+    const username = document.getElementById('reg-username').value;
+    const email = document.getElementById('reg-email').value;
+    const password = document.getElementById('reg-password').value;
+
+    if (username && email && password) {
+      if (!email.endsWith("@gmail.com")) {
+        alert("El correo debe ser de Gmail.");
+        return;
+      }
+
+      savedUser = { username, email, password };
+      alert("Cuenta creada con éxito. Ahora inicia sesión.");
+      document.getElementById('register').classList.add('hidden');
+      document.getElementById('login').classList.remove('hidden');
+    } else {
+      alert("Por favor completa todos los campos.");
+    }
+  }
+
+  function login() {
+    const username = document.getElementById('login-username').value;
+    const password = document.getElementById('login-password').value;
+  
+    if (username === savedUser.username && password === savedUser.password) {
+      alert("¡Inicio de sesión exitoso!");
+      window.location.href = "main.html"; // Redirecciona a main.html
+    } else {
+      alert("Usuario o contraseña incorrectos.");
+    }
+  }
+  
+
+  function showLogin() {
+    document.getElementById('register').classList.add('hidden');
+    document.getElementById('login').classList.remove('hidden');
+  }
+  
+
+  function googleLogin() {
+    alert("Simulación de inicio de sesión con Google.");
+  }
+</script>
+
+</body>
+</html>
