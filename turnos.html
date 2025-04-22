@@ -5,10 +5,534 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reservar Turno - Estética Tortuguitas</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="turnos.css"> <!-- Archivo CSS adicional -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #e83e8c;
+            --secondary-color: #6f42c1;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --success-color: #28a745;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header y navegación */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        nav li {
+            position: relative;
+        }
+
+        nav a {
+            display: block;
+            padding: 1.2rem 1rem;
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--primary-color);
+        }
+
+        nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+
+        /* Logo */
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        /* Contenedor principal */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        /* Sección de reserva */
+        .reservation-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .reservation-section h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-size: 2.2rem;
+        }
+
+        .reservation-description {
+            text-align: center;
+            color: #6c757d;
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Proceso de reserva */
+        .booking-progress {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .booking-step {
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .booking-step::after {
+            content: '';
+            position: absolute;
+            top: 30px;
+            right: 50%;
+            width: 100%;
+            height: 3px;
+            background-color: #dee2e6;
+            z-index: 1;
+        }
+
+        .booking-step:last-child::after {
+            display: none;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e9ecef;
+            color: #6c757d;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            font-weight: bold;
+            position: relative;
+            z-index: 2;
+            transition: var(--transition);
+        }
+
+        .booking-step.active .step-number {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .booking-step.completed .step-number {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .step-title {
+            font-weight: 500;
+            color: #6c757d;
+            transition: var(--transition);
+        }
+
+        .booking-step.active .step-title {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .booking-step.completed .step-title {
+            color: var(--success-color);
+        }
+
+        /* Paneles de reserva */
+        .booking-panel {
+            display: none;
+        }
+
+        .booking-panel.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Formulario */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #495057;
+        }
+
+        select, input, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            border-color: var(--primary-color);
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(232, 62, 140, 0.25);
+        }
+
+        /* Servicio cards */
+        .service-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-card {
+            border: 2px solid #e9ecef;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow);
+        }
+
+        .service-card.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(232, 62, 140, 0.05);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .service-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .service-duration, .service-price {
+            color: #6c757d;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Calendario y hora */
+        .calendar-container {
+            margin-bottom: 2rem;
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 1rem;
+        }
+
+        .time-slot {
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: var(--border-radius);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .time-slot:hover {
+            background-color: #f8f9fa;
+        }
+
+        .time-slot.selected {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .time-slot.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: #e9ecef;
+        }
+
+        /* Botones de navegación */
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-prev {
+            background-color: #e9ecef;
+            color: #495057;
+        }
+
+        .btn-prev:hover {
+            background-color: #dee2e6;
+        }
+
+        .btn-next, .btn-book {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-next:hover, .btn-book:hover {
+            background-color: #d83179;
+            transform: translateY(-2px);
+        }
+
+        /* Resumen de reserva */
+        .booking-summary {
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .booking-summary h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .summary-value {
+            font-weight: 600;
+        }
+
+        .summary-total {
+            font-size: 1.25rem;
+            color: var(--primary-color);
+        }
+
+        /* Confirmación */
+        .confirmation-message {
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .confirmation-icon {
+            font-size: 5rem;
+            color: var(--success-color);
+            margin-bottom: 2rem;
+        }
+
+        .confirmation-message h2 {
+            color: var(--success-color);
+            margin-bottom: 1rem;
+        }
+
+        .confirmation-message p {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            color: #6c757d;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .footer-heading {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #f8f9fa;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            display: inline-block;
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+            text-align: center;
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav li {
+                width: 100%;
+            }
+
+            nav a {
+                padding: 0.8rem 0;
+            }
+
+            .booking-progress {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .booking-step::after {
+                display: none;
+            }
+
+            .service-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .time-slots {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .footer-content {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Barra de navegación -->
@@ -27,147 +551,406 @@
         </nav>
     </header>
 
-    <!-- Sección de Reserva -->
-    <section id="reservation" class="reservation-section">
-        <h1>Reserva tu Turno</h1>
-        <p class="reservation-description">Selecciona el servicio, fecha y hora que más te convenga, y completa los datos para confirmar tu turno.</p>
-        
-        <!-- Formulario de reserva -->
-        <form id="bookingForm">
-            <div class="form-group">
-                <label for="service">Selecciona el Servicio:</label>
-                <select id="service" name="service" required>
-                    <option value="masajes" data-duration="30" data-price="2000">Masajes (30 minutos) - $2000</option>
-                    <option value="manicura" data-duration="30" data-price="800">Manicura (30 minutos) - $800</option>
-                    <option value="limpieza_facial" data-duration="30" data-price="1200">Limpieza Facial (30 minutos) - $1200</option>
-                    <option value="depilacion" data-duration="60" data-price="1500">Depilación (1 hora) - $1500</option>
-                </select>
-            </div>
-
-            <!-- Calendario para seleccionar fecha -->
-            <div class="form-group">
-                <label for="date">Selecciona la Fecha:</label>
-                <input type="text" id="date" name="date" class="datepicker" required>
-            </div>
-
-            <!-- Horario disponible -->
-            <div class="form-group">
-                <label for="time">Selecciona la Hora:</label>
-                <select id="time" name="time" required>
-                    <!-- Opciones de hora se cargarán dinámicamente -->
-                </select>
-            </div>
-
-            <!-- Datos del Cliente -->
-            <div class="form-group">
-                <label for="name">Nombre:</label>
-                <input type="text" id="name" name="name" required>
-            </div>
-
-            <div class="form-group">
-                <label for="email">Correo Electrónico:</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-
-            <div class="form-group">
-                <label for="phone">Teléfono:</label>
-                <input type="tel" id="phone" name="phone" required>
-            </div>
-
-            <div class="form-group">
-                <button type="submit" id="submitBooking" class="btn-book">Ver Resumen</button>
-            </div>
-        </form>
-
-        <!-- Resumen de la reserva -->
-        <div id="bookingSummary" class="booking-summary" style="display: none;">
-            <h2>Resumen de tu Reserva</h2>
-            <p id="summaryDetails">Por favor selecciona todos los campos para ver el resumen de tu reserva.</p>
+    <!-- Contenido principal -->
+    <div class="container">
+        <!-- Sección de Reserva -->
+        <section id="reservation" class="reservation-section">
+            <h1>Reserva tu Turno</h1>
+            <p class="reservation-description">Selecciona el servicio, fecha y hora que más te convenga para disfrutar de nuestros tratamientos profesionales.</p>
             
-            <!-- Botón de Confirmación -->
-            <div id="confirmBookingContainer" style="display: none;">
-                <button id="confirmBooking" class="btn-book">Confirmar Compra</button>
+            <!-- Indicador de progreso -->
+            <div class="booking-progress">
+                <div class="booking-step active" id="step1">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Elegir Servicio</div>
+                </div>
+                <div class="booking-step" id="step2">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Fecha y Hora</div>
+                </div>
+                <div class="booking-step" id="step3">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Tus Datos</div>
+                </div>
+                <div class="booking-step" id="step4">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Confirmar</div>
+                </div>
             </div>
-        </div>
-    </section>
+            
+            <!-- Panel 1: Selección de servicio -->
+            <div class="booking-panel active" id="panel1">
+                <h2>Selecciona el servicio que deseas</h2>
+                
+                <div class="service-cards">
+                    <div class="service-card" data-service="masajes" data-duration="30" data-price="2000">
+                        <div class="service-icon"><i class="fas fa-spa"></i></div>
+                        <div class="service-name">Masajes</div>
+                        <div class="service-duration">Duración: 30 minutos</div>
+                        <div class="service-price">Precio: $2000</div>
+                    </div>
+                    
+                    <div class="service-card" data-service="manicura" data-duration="30" data-price="800">
+                        <div class="service-icon"><i class="fas fa-hand-sparkles"></i></div>
+                        <div class="service-name">Manicura</div>
+                        <div class="service-duration">Duración: 30 minutos</div>
+                        <div class="service-price">Precio: $800</div>
+                    </div>
+                    
+                    <div class="service-card" data-service="limpieza_facial" data-duration="30" data-price="1200">
+                        <div class="service-icon"><i class="fas fa-face-smile"></i></div>
+                        <div class="service-name">Limpieza Facial</div>
+                        <div class="service-duration">Duración: 30 minutos</div>
+                        <div class="service-price">Precio: $1200</div>
+                    </div>
+                    
+                    <div class="service-card" data-service="depilacion" data-duration="60" data-price="1500">
+                        <div class="service-icon"><i class="fas fa-pump-soap"></i></div>
+                        <div class="service-name">Depilación</div>
+                        <div class="service-duration">Duración: 60 minutos</div>
+                        <div class="service-price">Precio: $1500</div>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <div></div> <!-- Espacio vacío para mantener la alineación -->
+                    <button class="btn btn-next" id="nextToDate">Continuar</button>
+                </div>
+            </div>
+            
+            <!-- Panel 2: Selección de fecha y hora -->
+            <div class="booking-panel" id="panel2">
+                <h2>Selecciona la fecha y hora</h2>
+                
+                <div class="calendar-container">
+                    <div class="form-group">
+                        <label for="date">Fecha:</label>
+                        <input type="text" id="date" name="date" class="datepicker" placeholder="Selecciona una fecha">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Horarios disponibles:</label>
+                    <div class="time-slots" id="timeSlots">
+                        <!-- Los horarios se cargarán dinámicamente -->
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn btn-prev" id="prevToService">Anterior</button>
+                    <button class="btn btn-next" id="nextToInfo">Continuar</button>
+                </div>
+            </div>
+            
+            <!-- Panel 3: Información personal -->
+            <div class="booking-panel" id="panel3">
+                <h2>Completa tus datos personales</h2>
+                
+                <div class="form-group">
+                    <label for="name">Nombre completo:</label>
+                    <input type="text" id="name" name="name" placeholder="Ingresa tu nombre completo" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Correo electrónico:</label>
+                    <input type="email" id="email" name="email" placeholder="Ingresa tu correo electrónico" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Teléfono:</label>
+                    <input type="tel" id="phone" name="phone" placeholder="Ingresa tu número de teléfono" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">Notas adicionales (opcional):</label>
+                    <textarea id="notes" name="notes" rows="3" placeholder="¿Alguna petición especial o información que debamos saber?"></textarea>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn btn-prev" id="prevToDate">Anterior</button>
+                    <button class="btn btn-next" id="nextToSummary">Revisar Resumen</button>
+                </div>
+            </div>
+            
+            <!-- Panel 4: Resumen y confirmación -->
+            <div class="booking-panel" id="panel4">
+                <h2>Resumen de tu reserva</h2>
+                
+                <div class="booking-summary">
+                    <div class="summary-item">
+                        <span class="summary-label">Servicio:</span>
+                        <span class="summary-value" id="summaryService">-</span>
+                    </div>
+                    
+                    <div class="summary-item">
+                        <span class="summary-label">Fecha:</span>
+                        <span class="summary-value" id="summaryDate">-</span>
+                    </div>
+                    
+                    <div class="summary-item">
+                        <span class="summary-label">Hora:</span>
+                        <span class="summary-value" id="summaryTime">-</span>
+                    </div>
+                    
+                    <div class="summary-item">
+                        <span class="summary-label">Duración:</span>
+                        <span class="summary-value" id="summaryDuration">-</span>
+                    </div>
+                    
+                    <div class="summary-item">
+                        <span class="summary-label">Nombre:</span>
+                        <span class="summary-value" id="summaryName">-</span>
+                    </div>
+                    
+                    <div class="summary-item">
+                        <span class="summary-label">Correo electrónico:</span>
+                        <span class="summary-value" id="summaryEmail">-</span>
+                    </div>
+                    
+                    <div class="summary-item">
+                        <span class="summary-label">Teléfono:</span>
+                        <span class="summary-value" id="summaryPhone">-</span>
+                    </div>
+                    
+                    <div class="summary-item">
+                        <span class="summary-label summary-total">Total a pagar:</span>
+                        <span class="summary-value summary-total" id="summaryPrice">-</span>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn btn-prev" id="prevToInfo">Modificar datos</button>
+                    <button class="btn btn-book" id="confirmBooking">Confirmar Reserva</button>
+                </div>
+            </div>
+            
+            <!-- Panel de confirmación -->
+            <div class="booking-panel" id="panel5">
+                <div class="confirmation-message">
+                    <div class="confirmation-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h2>¡Reserva Confirmada!</h2>
+                    <p>Tu turno ha sido reservado exitosamente. Te hemos enviado un correo electrónico con los detalles de tu reserva.</p>
+                    <p>Número de confirmación: <strong id="confirmationNumber">ABC12345</strong></p>
+                    <a href="index.html" class="btn btn-book">Volver al inicio</a>
+                </div>
+            </div>
+        </section>
+    </div>
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2025 Estética Tortuguitas. Todos los derechos reservados.</p>
-        <p>Ubicación: Tortuguitas, Argentina | Email: contacto@estetica.com | Teléfono: 1234-5678</p>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 class="footer-heading">Estética Tortuguitas</h3>
+                <p>Tu centro de belleza y bienestar personal. Servicios profesionales para realzar tu belleza natural.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Enlaces rápidos</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="servicios.html">Servicios</a></li>
+                    <li><a href="turnos.html">Reservar Turno</a></li>
+                    <li><a href="promocion.html">Promociones</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Contacto</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Av. Principal 1234, Tortuguitas</p>
+                <p><i class="fas fa-phone"></i> (011) 1234-5678</p>
+                <p><i class="fas fa-envelope"></i> contacto@esteticatortuguitas.com</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Horarios</h3>
+                <p>Lunes a Viernes: 9:00 - 20:00</p>
+                <p>Sábados: 9:00 - 18:00</p>
+                <p>Domingos: Cerrado</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 Estética Tortuguitas. Todos los derechos reservados.</p>
+        </div>
     </footer>
 
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        // Configuración de Flatpickr para el calendario
-        flatpickr("#date", {
-            minDate: "today", // No permitir fechas pasadas
-            enableTime: false, // Solo fecha, no hora
-            dateFormat: "Y-m-d", // Formato de la fecha
-            onChange: function(selectedDates, dateStr, instance) {
-                loadAvailableTimes(dateStr); // Cargar los horarios disponibles cuando se seleccione una fecha
-            }
-        });
+        $(document).ready(function() {
+            // Variables globales para almacenar datos de la reserva
+            let selectedService = '';
+            let selectedServiceName = '';
+            let selectedDuration = '';
+            let selectedPrice = '';
+            let selectedDate = '';
+            let selectedTime = '';
+            
+            // Configuración del calendario
+            flatpickr("#date", {
+                minDate: "today",
+                dateFormat: "d/m/Y",
+                locale: {
+                    firstDayOfWeek: 1,  // Lunes como primer día de la semana
+                    weekdays: {
+                        shorthand: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                        longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
+                    },
+                    months: {
+                        shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                        longhand: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+                    }
+                },
+                disable: [
+                    function(date) {
+                        // Deshabilitar domingos (0 = domingo)
+                        return date.getDay() === 0;
+                    }
+                ],
+                onChange: function(selectedDates, dateStr) {
+                    selectedDate = dateStr;
+                    loadAvailableTimes();
+                }
+            });
+            
+            // Selección de servicio
+            $('.service-card').on('click', function() {
+                $('.service-card').removeClass('selected');
+                $(this).addClass('selected');
+                
+                selectedService = $(this).data('service');
+                selectedServiceName = $(this).find('.service-name').text();
+                selectedDuration = $(this).data('duration');
+                selectedPrice = $(this).data('price');
+            });
+            
+            // Cargar horarios disponibles
+            function loadAvailableTimes() {
+                const timeSlots = $('#timeSlots');
+                timeSlots.empty();
+                
+                if (!selectedService || !selectedDate) return;
+                
+                // Horarios según el servicio y duración
+                let availableHours;
+                
+                if (selectedDuration == 30) {
+                    availableHours = ["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", 
+                                    "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", 
+                                    "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", 
+                                    "17:00", "17:30", "18:00", "18:30", "19:00", "19:30"];
+                } else {
+                    availableHours = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", 
+                                    "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
+                }
+                
+                // Simulamos que algunos horarios ya están ocupados para este ejemplo
+                const bookedTimesForDate = ["10:00", "14:30", "16:00"];
+                
+                // Crear los slots de tiempo
+                Javascript// Crear los slots de tiempo
+availableHours.forEach(function(time) {
+   const isBooked = bookedTimesForDate.includes(time);
+   const timeSlot = $('<div>')
+       .addClass('time-slot')
+       .addClass(isBooked ? 'disabled' : '')
+       .text(time);
+       
+   if (!isBooked) {
+       timeSlot.on('click', function() {
+           $('.time-slot').removeClass('selected');
+           $(this).addClass('selected');
+           selectedTime = time;
+       });
+   }
+   
+   timeSlots.append(timeSlot);
+});
+}
 
-        // Horarios disponibles por día (ejemplo)
-        const availableTimes = {
-            "masajes": {
-                "30": ["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30"],
-            },
-            "depilacion": {
-                "60": ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"],
-            }
-        };
+// Navegación entre paneles
+$('#nextToDate').on('click', function() {
+   if (!selectedService) {
+       alert('Por favor selecciona un servicio');
+       return;
+   }
+   
+   $('#panel1').removeClass('active');
+   $('#panel2').addClass('active');
+   $('#step1').removeClass('active').addClass('completed');
+   $('#step2').addClass('active');
+});
 
-        // Función para cargar los horarios disponibles según la fecha seleccionada
-        function loadAvailableTimes(date) {
-            const selectedService = $("#service").val();
-            const duration = $("#service option:selected").data("duration");
-            const availableHours = availableTimes[selectedService][duration];
+$('#prevToService').on('click', function() {
+   $('#panel2').removeClass('active');
+   $('#panel1').addClass('active');
+   $('#step2').removeClass('active');
+   $('#step1').removeClass('completed').addClass('active');
+});
 
-            const timeSelect = $("#time");
-            timeSelect.empty(); // Limpiar opciones previas
+$('#nextToInfo').on('click', function() {
+   if (!selectedDate || !selectedTime) {
+       alert('Por favor selecciona fecha y hora');
+       return;
+   }
+   
+   $('#panel2').removeClass('active');
+   $('#panel3').addClass('active');
+   $('#step2').removeClass('active').addClass('completed');
+   $('#step3').addClass('active');
+});
 
-            if (availableHours) {
-                availableHours.forEach(function(hour) {
-                    const option = $("<option>").val(hour).text(hour);
-                    timeSelect.append(option);
-                });
-            }
-        }
+$('#prevToDate').on('click', function() {
+   $('#panel3').removeClass('active');
+   $('#panel2').addClass('active');
+   $('#step3').removeClass('active');
+   $('#step2').removeClass('completed').addClass('active');
+});
 
-        // Actualizar resumen de la reserva
-        $('#bookingForm').on('submit', function(e) {
-            e.preventDefault();
-            const service = $('#service').val();
-            const date = $('#date').val();
-            const time = $('#time').val();
-            const name = $('#name').val();
-            const email = $('#email').val();
-            const phone = $('#phone').val();
+$('#nextToSummary').on('click', function() {
+   if (!$('#name').val() || !$('#email').val() || !$('#phone').val()) {
+       alert('Por favor completa todos los campos requeridos');
+       return;
+   }
+   
+   // Actualizar resumen
+   $('#summaryService').text(selectedServiceName);
+   $('#summaryDate').text(selectedDate);
+   $('#summaryTime').text(selectedTime);
+   $('#summaryDuration').text(selectedDuration + ' minutos');
+   $('#summaryName').text($('#name').val());
+   $('#summaryEmail').text($('#email').val());
+   $('#summaryPhone').text($('#phone').val());
+   $('#summaryPrice').text('$' + selectedPrice);
+   
+   $('#panel3').removeClass('active');
+   $('#panel4').addClass('active');
+   $('#step3').removeClass('active').addClass('completed');
+   $('#step4').addClass('active');
+});
 
-            const serviceText = $("#service option:selected").text();
-            const price = $("#service option:selected").data("price");
+$('#prevToInfo').on('click', function() {
+   $('#panel4').removeClass('active');
+   $('#panel3').addClass('active');
+   $('#step4').removeClass('active');
+   $('#step3').removeClass('completed').addClass('active');
+});
 
-            const summary = `
-                <p>Servicio: ${serviceText}</p>
-                <p>Fecha: ${date}</p>
-                <p>Hora: ${time}</p>
-                <p>Nombre: ${name}</p>
-                <p>Email: ${email}</p>
-                <p>Teléfono: ${phone}</p>
-                <p>Total a Pagar: $${price}</p>
-            `;
-
-            $("#summaryDetails").html(summary);
-            $("#bookingSummary").show(); // Mostrar el resumen
-            $("#confirmBookingContainer").show(); // Mostrar el botón de confirmar compra
-        });
-
-        // Confirmar compra y redirigir al inicio
-        $('#confirmBooking').on('click', function() {
-            // Redirigir al inicio después de la compra
-            window.location.href = 'index.html'; // Redirige al inicio
-        });
-    </script>
-</body>
-</html>
+$('#confirmBooking').on('click', function() {
+   // Simulamos la confirmación
+   $('#confirmationNumber').text('TQ' + Math.floor(Math.random() * 10000));
+   
+   $('#panel4').removeClass('active');
+   $('#panel5').addClass('active');
+   $('#step4').removeClass('active').addClass('completed');
+});
+});
