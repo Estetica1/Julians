@@ -3,15 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Promociones - Estética Tortuguitas</title>
-    <link rel="stylesheet" href="promocion.css"> <!-- Enlazando con el archivo CSS -->
+    <title>Belleza en tus Manos | Promociones de Manicura</title>
+    <link rel="stylesheet" href="promocion.css">
 </head>
 <body>
-    <!-- Barra de navegación -->
     <header>
-        <nav>
-            <ul>
-                <li><a href="index.html" class="active">HOME</a></li>
+        <div class="logo">Belleza en tus Manos</div>
+        <p>Servicios profesionales de manicura</p>
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="index.html" class="active">HOME</a></li>
                 <li><a href="servicios.html">Servicios</a></li>
                 <li><a href="adminturno.html">Ver Turnos</a></li>
                 <li><a href="promocion.html">Ver Promociones</a></li>
@@ -19,58 +22,125 @@
                 <li><a href="finanzas.html">Finanzas</a></li>
                 <li><a href="turnos.html">Reservar Turno</a></li>
                 <li><a href="estetica/index.html">LOGIN</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <!-- Sección de Promociones -->
-    <section class="promotions">
-        <div class="container">
-            <h1>Promociones Especiales</h1>
-            <p>Descubre nuestras ofertas exclusivas para que disfrutes de nuestros servicios de estética a precios increíbles.</p>
-
-            <div class="promotions-list">
-                <!-- Promoción 1 -->
-                <div class="promotion">
-                    <img src="imagenes/promo1.jpg" alt="Promo Masajes">
-                    <div class="promotion-details">
-                        <h2>Masajes Relajantes</h2>
-                        <p><strong>20% de Descuento</strong> en tu primer masaje relajante.</p>
-                        <p><strong>Condiciones:</strong> Válido solo de lunes a viernes, con reserva anticipada. No acumulable con otras promociones.</p>
-                        <p><strong>Precio:</strong> ~$2000~ $1600</p>
+        </ul>
+    </nav>
+    
+    <section class="banner">
+        <div class="banner-content">
+            <h1>PROMOCIONES ESPECIALES</h1>
+            <p>Descubre nuestras increíbles ofertas para mantener tus uñas perfectas y a la moda con los mejores productos del mercado.</p>
+            <a href="#promociones" class="btn">Ver Promociones</a>
+        </div>
+    </section>
+    
+    <section class="promotions" id="promociones">
+        <h2 class="section-title">Nuestras Promociones</h2>
+        <div class="promo-container">
+            <div class="promo-card">
+                <div class="promo-img" style="background-image: url('/api/placeholder/300/200');"></div>
+                <div class="promo-content">
+                    <h3 class="promo-title">Manicura Gel Básica</h3>
+                    <p class="promo-description">Incluye limado, formado, cutículas y esmalte de gel en color sólido.</p>
+                    <div class="promo-price">
+                        <span class="original-price">$3000</span>
+                        <span class="sale-price">$2000</span>
                     </div>
+                    <a href="#contacto" class="btn">Reservar</a>
                 </div>
-
-                <!-- Promoción 2 -->
-                <div class="promotion">
-                    <img src="imagenes/promo2.jpg" alt="Promo Manicura">
-                    <div class="promotion-details">
-                        <h2>Manicura + Diseño de Uñas</h2>
-                        <p><strong>2x1 en Manicura</strong> con el diseño de uñas incluido.</p>
-                        <p><strong>Condiciones:</strong> Oferta válida solo los sábados, con reserva previa. Solo para nuevas clientas.</p>
-                        <p><strong>Precio:</strong> ~$800~ $400 por dos personas.</p>
+            </div>
+            
+            <div class="promo-card">
+                <div class="promo-img" style="background-image: url('/api/placeholder/300/200');"></div>
+                <div class="promo-content">
+                    <h3 class="promo-title">Manicura Premium</h3>
+                    <p class="promo-description">Incluye exfoliación, masaje, tratamiento hidratante y esmaltado semipermanente.</p>
+                    <div class="promo-price">
+                        <span class="original-price">$2500</span>
+                        <span class="sale-price">$2000</span>
                     </div>
+                    <a href="#contacto" class="btn">Reservar</a>
                 </div>
-
-                <!-- Promoción 3 -->
-                <div class="promotion">
-                    <img src="imagenes/promo3.jpg" alt="Promo Depilación">
-                    <div class="promotion-details">
-                        <h2>Depilación Total</h2>
-                        <p><strong>30% de Descuento</strong> en depilaciones completas (piernas, brazos, etc.).</p>
-                        <p><strong>Condiciones:</strong> Promoción válida solo los días martes y miércoles. Aplicable a todos los servicios de depilación.</p>
-                        <p><strong>Precio:</strong> ~$1500~ $1050</p>
+            </div>
+            
+            <div class="promo-card">
+                <div class="promo-img" style="background-image: url('/api/placeholder/300/200');"></div>
+                <div class="promo-content">
+                    <h3 class="promo-title">Pack Uñas Acrílicas</h3>
+                    <p class="promo-description">Aplicación completa de uñas acrílicas con diseño a elección.</p>
+                    <div class="promo-price">
+                        <span class="original-price">$4000</span>
+                        <span class="sale-price">$3900</span>
                     </div>
+                    <a href="#contacto" class="btn">Reservar</a>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- Footer -->
+    
+    <section class="testimonials" id="testimonios">
+        <h2 class="section-title">Lo que dicen nuestras clientas</h2>
+        <div class="testimonial-container">
+            <div class="testimonial">
+                <p class="testimonial-text">"Excelente servicio, me encantó el resultado de mis uñas. Muy profesionales y con un ambiente acogedor."</p>
+                <p class="testimonial-author">María González</p>
+            </div>
+            
+            <div class="testimonial">
+                <p class="testimonial-text">"Las promociones son increíbles y la calidad del trabajo es excepcional. Recomendado al 100%."</p>
+                <p class="testimonial-author">Laura Mendoza</p>
+            </div>
+            
+            <div class="testimonial">
+                <p class="testimonial-text">"Llevo más de un año asistiendo y nunca me han decepcionado. Mis uñas duran impecables por semanas."</p>
+                <p class="testimonial-author">Ana Rodríguez</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="contact" id="contacto">
+        <h2 class="section-title">Reserva tu cita</h2>
+        <div class="contact-form">
+            <form>
+                <div class="form-group">
+                    <label for="name">Nombre completo</label>
+                    <input type="text" id="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Correo electrónico</label>
+                    <input type="email" id="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Teléfono</label>
+                    <input type="tel" id="phone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="service">Servicio deseado</label>
+                    <input type="text" id="service" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Mensaje (opcional)</label>
+                    <textarea id="message"></textarea>
+                </div>
+                
+                <button type="submit" class="btn">Enviar Reserva</button>
+            </form>
+        </div>
+    </section>
+    
     <footer>
-        <p>&copy; 2025 Estética Tortuguitas. Todos los derechos reservados.</p>
-        <p>Ubicación: Tortuguitas, Argentina | Email: contacto@estetica.com | Teléfono: 1234-5678</p>
+        <div class="logo">Belleza en tus Manos</div>
+        <p>Horario de atención: Lunes a Sábado de 9:00 a 20:00</p>
+        <div class="social-icons">
+            <a href="#">FB</a>
+            <a href="#">IG</a>
+            <a href="#">TW</a>
+            <a href="#">WA</a>
+        </div>
+        <p class="copyright">© 2025 Belleza en tus Manos. Todos los derechos reservados.</p>
     </footer>
-
 </body>
 </html>
