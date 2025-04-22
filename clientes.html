@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Clientes - Estética Tortuguitas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="clientes.css">
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="active">HOME</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="adminturno.html">Ver Turnos</a></li>
+                <li><a href="promocion.html">Ver Promociones</a></li>
+                <li><a href="clientes.html">Control de Clientes</a></li>
+                <li><a href="finanzas.html">Finanzas</a></li>
+                <li><a href="turnos.html">Reservar Turno</a></li>
+                <li><a href="estetica/index.html">LOGIN</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- Sección de Control de Clientes -->
+        <section class="clientes-section">
+            <h1>Control de Clientes</h1>
+
+            <!-- Mostrar Nombre de Usuario Conectado -->
+            <div class="welcome-message">
+                <div>
+                    <i class="fas fa-user-circle"></i> 
+                    Bienvenido, <span id="usernameDisplay">Cargando...</span>
+                </div>
+                <div>
+                    <span id="currentDate">Fecha</span>
+                </div>
+            </div>
+
+            <!-- Dashboard Estadísticas -->
+            <div class="dashboard">
+                <div class="stat-card">
+                    <i class="fas fa-users"></i>
+                    <h3 id="totalClients">0</h3>
+                    <p>Clientes Totales</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-user-clock"></i>
+                    <h3 id="activeClients">0</h3>
+                    <p>Clientes Activos</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-calendar-check"></i>
+                    <h3 id="monthlyVisits">0</h3>
+                    <p>Visitas del Mes</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-dollar-sign"></i>
+                    <h3 id="monthlyRevenue">$0</h3>
+                    <p>Ingresos del Mes</p>
+                </div>
+            </div>
+
+            <!-- Barra de Acciones -->
+            <div class="action-bar">
+                <!-- Buscar Cliente -->
+                <div class="search-bar">
+                    <input type="text" id="searchClient" placeholder="Buscar Cliente por Nombre, ID o Teléfono...">
+                    <button onclick="searchClient()"><i class="fas fa-search"></i> Buscar</button>
+                </div>
+
+                <!-- Filtros -->
+                <div class="filter-options">
+                    <select id="filterVisits">
+                        <option value="all">Todas las visitas</option>
+                        <option value="recent">Visita reciente</option>
+                        <option value="inactive">Inactivos +30 días</option>
+                    </select>
+                    <select id="filterServices">
+                        <option value="all">Todos los servicios</option>
+                        <option value="facial">Faciales</option>
+                        <option value="manicure">Manicura</option>
+                        <option value="pedicure">Pedicura</option>
+                        <option value="massage">Masajes</option>
+                    </select>
+                </div>
+
+                <!-- Agregar Cliente -->
+                <button class="add-client-btn" onclick="openAddClientModal()">
+                    <i class="fas fa-user-plus"></i> Nuevo Cliente
+                </button>
+            </div>
+
+            <!-- Tabs para diferentes vistas -->
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('listTab')">Lista de Clientes</div>
+                <div class="tab" onclick="switchTab('birthdaysTab')">Cumpleaños del Mes</div>
+                <div class="tab" onclick="switchTab('inactiveTab')">Clientes Inactivos</div>
+            </div>
+
+            <!-- Contenido de las Tabs -->
+            <div id="listTab" class="tab-content active">
+                <!-- Tabla de Clientes -->
+                <table id="clientesTable">
+                    <thead>
+                        <tr>
+                            <th>ID <i class="fas fa-sort"></i></th>
+                            <th>Nombre <i class="fas fa-sort"></i></th>
+                            <th>Visitas <i class="fas fa-sort"></i></th>
+                            <th>Última Visita <i class="fas fa-sort"></i></th>
+                            <th>Gastos Totales <i class="fas fa-sort"></i></th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Los clientes se cargarán dinámicamente -->
+                    </tbody>
+                </table>
+
+                <!-- Paginación -->
+                <div class="pagination">
+                    <button onclick="goToPage(1)">1</button>
+                    <button onclick="goToPage(2)">2</button>
+                    <button onclick="goToPage(3)">3</button>
+                    <button>...</button>
+                    <button onclick="goToPage('next')"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+
+            <div id="birthdaysTab" class="tab-content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Fecha de Cumpleaños</th>
+                            <th>Días Restantes</th>
+                            <th>Contacto</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="birthdaysTable">
+                        <!-- Se cargará dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="inactiveTab" class="tab-content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Última Visita</th>
+                            <th>Días Inactivo</th>
+                            <th>Contacto</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inactiveTable">
+                        <!-- Se cargará dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal para Agregar/Editar Cliente -->
+    <div id="clientModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('clientModal')">&times;</span>
+            <h2 id="modalTitle">Agregar Nuevo Cliente</h2>
+            
+            <form id="clientForm">
+                <input type="hidden" id="clientId" value="">
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="clientName">Nombre Completo</label>
+                            <input type="text" id="clientName" required>
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="clientPhone">Teléfono</label>
+                            <input type="tel" id="clientPhone">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="clientEmail">Email</label>
+                            <input type="email" id="clientEmail">
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="clientBirthday">Fecha de Nacimiento</label>
+                            <input type="date" id="clientBirthday">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="clientAddress">Dirección</label>
+                    <input type="text" id="clientAddress">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="preferredDays">Días Preferidos</label>
+                            <select id="preferredDays" multiple>
+                                <option value="lunes">Lunes</option>
+                                <option value="martes">Martes</option>
+                                <option value="miercoles">Miércoles</option>
+                                <option value="jueves">Jueves</option>
+                                <option value="viernes">Viernes</option>
+                                <option value="sabado">Sábado</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="preferredServices">Servicios Preferidos</label>
+                            <select id="preferredServices" multiple>
+                                <option value="facial">Tratamiento Facial</option>
+                                <option value="manicure">Manicura</option>
+                                <option value="pedicure">Pedicura</option>
+                                <option value="massage">Masaje</option>
+                                <option value="waxing">Depilación</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="clientNotes">Notas</label>
+                    <textarea id="clientNotes" rows="3"></textarea>
+                </div>
+                
+                <div class="btn-group">
+                    <button type="button" class="btn btn-light" onclick="closeModal('clientModal')">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="saveClientBtn">Guardar Cliente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Ver Detalles del Cliente -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('detailsModal')">&times;</span>
+            <h2 id="clientDetailName">Nombre del Cliente</h2>
+            
+            <div class="client-details">
+                <div class="detail-card">
+                    <h4>Contacto</h4>
+                    <p><i class="fas fa-phone"></i> <span id="detailPhone">-</span></p>
+                    <p><i class="fas fa-envelope"></i> <span id="detailEmail">-</span></p>
+                </div>
+                <div class="detail-card">
+                    <h4>Información Personal</h4>
+                    <p><i class="fas fa-birthday-cake"></i> <span id="detailBirthday">-</span></p>
+                    <p><i class="fas fa-map-marker-alt"></i> <span id="detailAddress">-</span></p>
+                </div>
+                <div class="detail-card">
+                    <h4>Estadísticas</h4>
+                    <p><i class="fas fa-calendar-check"></i> Visitas: <span id="detailVisits">0</span></p>
+                    <p><i class="fas fa-dollar-sign"></i> Gasto Total: <span id="detailSpending">$0</span></p>
+                </div>
+                <div class="detail-card">
+                    <h4>Preferencias</h4>
+                    <p><i class="fas fa-clock"></i> Días: <span id="detailDays">-</span></p>
+                    <p><i class="fas fa-spa"></i> Servicios: <span id="detailServices">-</span></p>
+                </div>
+            </div>
+            
+            <div class="tabs-details">
+                <div class="tabs">
+                    <div class="tab active" onclick="switchDetailTab('historyTab')">Historial</div>
+                    <div class="tab" onclick="switchDetailTab('notesTab')">Notas</div>
+                    <div class="tab" onclick="switchDetailTab('appointmentsTab')">Próximas Citas</div>
+                </div>
+                
+                <div id="historyTab" class="tab-content active">
+                    <h3>Historial de Servicios</h3>
+                    <div id="serviceHistory">
+                        <!-- Se cargará dinámicamente -->
+                    </div>
+                </div>
+                
+                <div id="notesTab" class="tab-content">
+                    <h3>Notas del Cliente</h3>
+                    <div id="clientNotesDisplay">
+                        <!-- Se cargará dinámicamente -->
+                    </div>
+                    <div class="form-group">
+                        <label for="newNote">Agregar Nota</label>
+                        <textarea id="newNote" rows="3"></textarea>
+                    </div>
+                    <button class="btn btn-primary" onclick="addClientNote()">Guardar Nota</button>
+                </div>
+                
+                <div id="appointmentsTab" class="tab-content">
+                    <h3>Próximas Citas</h3>
+                    <div id="upcomingAppointments">
+                        <!-- Se cargará dinámicamente -->
+                    </div>
+                    <button class="btn btn-primary" onclick="scheduleAppointment()">Programar Cita</button>
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-light" onclick="closeModal('detailsModal')">Cerrar</button>
+                <button class="btn btn-primary" onclick="editClient(currentClientId)">Editar Cliente</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let clientes = [];
+        let currentClientId = null;
+        let currentPage = 1;
+        const clientsPerPage = 10;
+        
+      // Función para inicializar datos de ejemplo
+    function initializeDemoData() {
+        clientes = [
+            {
+                id: 1,
+                nombre: "Ana María González",
+                telefono: "11-3456-7890",
+                email: "ana.gonzalez@email.com",
+                fechaNacimiento: "1985-06-15",
+                direccion: "Av. Siempreviva 742",
+                diasPreferidos: ["lunes", "miercoles", "viernes"],
+                serviciosPreferidos: ["facial", "manicure"],
+                visitas: 8,
+                ultimaVisita: "2025-04-10",
+                gastoTotal: 12500,
+                notas: "Cliente regular. Prefiere atención en las mañanas.",
+                historial: [
+                    {
+                        fecha: "2025-04-10",
+                        servicio: "Facial Hidratante Profesional",
+                        costo: 3500,
+                        notas: "Se realizó exfoliación adicional."
+                    },
+                    {
+                        fecha: "2025-03-15",
+                        servicio: "Manicura con Esmaltado Semipermanente",
+                        costo: 2200,
+                        notas: "Eligió color rosa pastel."
+                    }
+                ],
+                proximasCitas: [
+                    {
+                        fecha: "2025-05-05",
+                        hora: "10:00",
+                        servicio: "Facial Hidratante"
+                    }
+                ]
+            },
+            {
+                id: 2,
+                nombre: "Carlos Eduardo Martínez",
+                telefono: "11-2345-6789",
+                email: "carlos.martinez@email.com",
+                fechaNacimiento: "1990-09-22",
+                direccion: "Calle Falsa 123",
+                diasPreferidos: ["martes", "jueves"],
+                serviciosPreferidos: ["massage"],
+                visitas: 5,
+                ultimaVisita: "2025-03-22",
+                gastoTotal: 9800,
+                notas: "Viene por recomendación. Tiene tensión en zona lumbar.",
+                historial: [
+                    {
+                        fecha: "2025-03-22",
+                        servicio: "Masaje Descontracturante",
+                        costo: 4500,
+                        notas: "Enfoque en espalda baja."
+                    }
+                ],
+                proximasCitas: []
+            },
+            {
+                id: 3,
+                nombre: "Gabriela López Silva",
+                telefono: "11-7890-1234",
+                email: "gaby.lopez@email.com",
+                fechaNacimiento: "1988-04-30",
+                direccion: "Av. Libertador 5678",
+                diasPreferidos: ["sabado"],
+                serviciosPreferidos: ["pedicure", "manicure", "waxing"],
+                visitas: 12,
+                ultimaVisita: "2025-04-15",
+                gastoTotal: 18600,
+                notas: "Cliente fiel. Alérgica a productos con parabenos.",
+                historial: [
+                    {
+                        fecha: "2025-04-15",
+                        servicio: "Combo Manicura y Pedicura",
+                        costo: 3800,
+                        notas: "Utilizó productos hipoalergénicos."
+                    },
+                    {
+                        fecha: "2025-03-18",
+                        servicio: "Depilación Piernas Completas",
+                        costo: 2900,
+                        notas: "Sin novedad."
+                    }
+                ],
+                proximasCitas: [
+                    {
+                        fecha: "2025-05-20",
+                        hora: "16:00",
+                        servicio: "Combo Manicura y Pedicura"
+                    }
+                ]
+            },
+            {
+                id: 4,
+                nombre: "Marcelo Suárez",
+                telefono: "11-5678-9012",
+                email: "marcelo.suarez@email.com",
+                fechaNacimiento: "1977-11-05",
+                direccion: "Belgrano 234",
+                diasPreferidos: ["lunes", "miercoles"],
+                serviciosPreferidos: ["massage", "facial"],
+                visitas: 3,
+                ultimaVisita: "2025-02-10",
+                gastoTotal: 5500,
+                notas: "Trabaja en oficina. Busca relajación de cuello y hombros.",
+                historial: [
+                    {
+                        fecha: "2025-02-10",
+                        servicio: "Masaje Relajante",
+                        costo: 3500,
+                        notas: "Enfoque en tensión cervical."
+                    }
+                ],
+                proximasCitas: []
+            },
+            {
+                id: 5,
+                nombre: "Valentina Ramírez",
+                telefono: "11-6789-0123",
+                email: "vale.ramirez@email.com",
+                fechaNacimiento: "1995-02-14",
+                direccion: "San Martín 456",
+                diasPreferidos: ["viernes", "sabado"],
+                serviciosPreferidos: ["facial", "waxing"],
+                visitas: 6,
+                ultimaVisita: "2025-04-05",
+                gastoTotal: 8900,
+                notas: "Piel sensible. Usa productos específicos.",
+                historial: [
+                    {
+                        fecha: "2025-04-05",
+                        servicio: "Limpieza Facial Profunda",
+                        costo: 4200,
+                        notas: "Tratamiento para piel sensible."
+                    }
+                ],
+                proximasCitas: [
+                    {
+                        fecha: "2025-05-03",
+                        hora: "11:30",
+                        servicio: "Depilación Facial"
+                    }
+                ]
+            }
+        ];
+        
+        updateDashboard();
+        displayClients();
+        displayBirthdays();
+        displayInactiveClients();
+    }
+    
+    // Función para actualizar el dashboard
+    function updateDashboard() {
+        const totalClients = clientes.length;
+        
+        // Calcular clientes activos (visitaron en los últimos 30 días)
+        const today = new Date();
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(today.getDate() - 30);
+        
+        const activeClients = clientes.filter(cliente => {
+            const ultimaVisitaDate = new Date(cliente.ultimaVisita);
+            return ultimaVisitaDate >= thirtyDaysAgo;
+        }).length;
+        
+        // Calcular visitas y ingresos del mes actual
+        const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        
+        let monthlyVisits = 0;
+        let monthlyRevenue = 0;
+        
+        clientes.forEach(cliente => {
+            cliente.historial.forEach(visita => {
+                const visitaDate = new Date(visita.fecha);
+                if (visitaDate >= firstDayOfMonth && visitaDate <= today) {
+                    monthlyVisits++;
+                    monthlyRevenue += visita.costo;
+                }
+            });
+        });
+        
+        // Actualizar el DOM
+        document.getElementById('totalClients').textContent = totalClients;
+        document.getElementById('activeClients').textContent = activeClients;
+        document.getElementById('monthlyVisits').textContent = monthlyVisits;
+        document.getElementById('monthlyRevenue').textContent = `$${monthlyRevenue}`;
+    }
+    
+    // Función para mostrar los clientes en la tabla
+    function displayClients(filteredClients = null) {
+        const tableBody = document.querySelector('#clientesTable tbody');
+        tableBody.innerHTML = '';
+        
+        const clientsToDisplay = filteredClients || clientes;
+        const startIndex = (currentPage - 1) * clientsPerPage;
+        const endIndex = startIndex + clientsPerPage;
+        const paginatedClients = clientsToDisplay.slice(startIndex, endIndex);
+        
+        if (paginatedClients.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No se encontraron clientes</td></tr>';
+            return;
+        }
+        
+        paginatedClients.forEach(cliente => {
+            const row = document.createElement('tr');
+            
+            // Formatear fecha
+            const ultimaVisitaDate = new Date(cliente.ultimaVisita);
+            const formattedDate = ultimaVisitaDate.toLocaleDateString('es-AR');
+            
+            row.innerHTML = `
+                <td>${cliente.id}</td>
+                <td>${cliente.nombre}</td>
+                <td>${cliente.visitas}</td>
+                <td>${formattedDate}</td>
+                <td>$${cliente.gastoTotal}</td>
+                <td class="action-buttons">
+                    <button class="view-btn" onclick="viewClientDetails(${cliente.id})"><i class="fas fa-eye"></i></button>
+                    <button class="edit-btn" onclick="editClient(${cliente.id})"><i class="fas fa-edit"></i></button>
+                    <button class="delete-btn" onclick="confirmDeleteClient(${cliente.id})"><i class="fas fa-trash"></i></button>
+                </td>
+            `;
+            
+            tableBody.appendChild(row);
+        });
+        
+        // Actualizar paginación
+        updatePagination(clientsToDisplay.length);
+    }
+    
+    // Función para mostrar cumpleaños del mes actual
+    function displayBirthdays() {
+        const tableBody = document.getElementById('birthdaysTable');
+        tableBody.innerHTML = '';
+        
+        const today = new Date();
+        const currentMonth = today.getMonth();
+        
+        const clientesConCumpleanos = clientes.filter(cliente => {
+            if (!cliente.fechaNacimiento) return false;
+            const birthDate = new Date(cliente.fechaNacimiento);
+            return birthDate.getMonth() === currentMonth;
+        });
+        
+        if (clientesConCumpleanos.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No hay cumpleaños este mes</td></tr>';
+            return;
+        }
+        
+        clientesConCumpleanos.sort((a, b) => {
+            const dateA = new Date(a.fechaNacimiento);
+            const dateB = new Date(b.fechaNacimiento);
+            return dateA.getDate() - dateB.getDate();
+        });
+        
+        clientesConCumpleanos.forEach(cliente => {
+            const birthDate = new Date(cliente.fechaNacimiento);
+            const birthDay = birthDate.getDate();
+            const today = new Date();
+            
+            // Calcular días restantes para el cumpleaños
+            let nextBirthday = new Date(today.getFullYear(), birthDate.getMonth(), birthDay);
+            if (nextBirthday < today) {
+                nextBirthday.setFullYear(today.getFullYear() + 1);
+            }
+            
+            const daysRemaining = Math.ceil((nextBirthday - today) / (1000 * 60 * 60 * 24));
+            const formattedBirthDate = birthDate.toLocaleDateString('es-AR');
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${cliente.nombre}</td>
+                <td>${formattedBirthDate}</td>
+                <td>${daysRemaining > 0 ? daysRemaining + ' días' : 'Hoy!'}</td>
+                <td>${cliente.telefono}</td>
+                <td class="action-buttons">
+                    <button class="view-btn" onclick="viewClientDetails(${cliente.id})"><i class="fas fa-eye"></i></button>
+                    <button class="btn-primary" onclick="sendBirthdayMessage(${cliente.id})"><i class="fas fa-gift"></i> Felicitar</button>
+                </td>
+            `;
+            
+            tableBody.appendChild(row);
+        });
+    }
+    
+    // Función para mostrar clientes inactivos (más de 30 días sin visita)
+    function displayInactiveClients() {
+        const tableBody = document.getElementById('inactiveTable');
+        tableBody.innerHTML = '';
+        
+        const today = new Date();
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(today.getDate() - 30);
+        
+        const clientesInactivos = clientes.filter(cliente => {
+            const ultimaVisitaDate = new Date(cliente.ultimaVisita);
+            return ultimaVisitaDate < thirtyDaysAgo;
+        });
+        
+        if (clientesInactivos.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No hay clientes inactivos</td></tr>';
+            return;
+        }
+        
+        // Ordenar por fecha de última visita (más antiguos primero)
+        clientesInactivos.sort((a, b) => {
+            return new Date(a.ultimaVisita) - new Date(b.ultimaVisita);
+        });
+        
+        clientesInactivos.forEach(cliente => {
+            const ultimaVisitaDate = new Date(cliente.ultimaVisita);
+            const formattedDate = ultimaVisitaDate.toLocaleDateString('es-AR');
+            
+            // Calcular días de inactividad
+            const diasInactivo = Math.ceil((today - ultimaVisitaDate) / (1000 * 60 * 60 * 24));
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${cliente.nombre}</td>
+                <td>${formattedDate}</td>
+                <td>${diasInactivo} días</td>
+                <td>${cliente.telefono}</td>
+                <td class="action-buttons">
+                    <button class="view-btn" onclick="viewClientDetails(${cliente.id})"><i class="fas fa-eye"></i></button>
+                    <button class="btn-primary" onclick="contactInactiveClient(${cliente.id})"><i class="fas fa-phone"></i> Contactar</button>
+                </td>
+            `;
+            
+            tableBody.appendChild(row);
+        });
+    }
+    
+    // Función para actualizar paginación
+    function updatePagination(totalItems) {
+        const totalPages = Math.ceil(totalItems / clientsPerPage);
+        const pagination = document.querySelector('.pagination');
+        pagination.innerHTML = '';
+        
+        // Botón anterior
+        const prevButton = document.createElement('button');
+        prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+        prevButton.disabled = currentPage === 1;
+        prevButton.addEventListener('click', () => goToPage(currentPage - 1));
+        pagination.appendChild(prevButton);
+        
+        // Números de página
+        const maxPageButtons = 5;
+        let startPage = Math.max(1, currentPage - Math.floor(maxPageButtons / 2));
+        let endPage = Math.min(totalPages, startPage + maxPageButtons - 1);
+        
+        if (endPage - startPage + 1 < maxPageButtons) {
+            startPage = Math.max(1, endPage - maxPageButtons + 1);
+        }
+        
+        for (let i = startPage; i <= endPage; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.textContent = i;
+            pageButton.classList.toggle('active', i === currentPage);
+            pageButton.addEventListener('click', () => goToPage(i));
+            pagination.appendChild(pageButton);
+        }
+        
+        // Botón siguiente
+        const nextButton = document.createElement('button');
+        nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+        nextButton.disabled = currentPage === totalPages;
+        nextButton.addEventListener('click', () => goToPage(currentPage + 1));
+        pagination.appendChild(nextButton);
+    }
+    
+    // Función para cambiar de página
+    function goToPage(page) {
+        if (typeof page === 'number') {
+            currentPage = page;
+        } else if (page === 'next') {
+            currentPage++;
+        } else if (page === 'prev') {
+            currentPage--;
+        }
+        
+        displayClients();
+    }
+    
+    // Función para buscar cliente
+    function searchClient() {
+        const searchValue = document.getElementById('searchClient').value.toLowerCase();
+        
+        if (!searchValue.trim()) {
+            displayClients();
+            return;
+        }
+        
+        const filteredClients = clientes.filter(cliente => {
+            return (
+                cliente.id.toString().includes(searchValue) ||
+                cliente.nombre.toLowerCase().includes(searchValue) ||
+                (cliente.telefono && cliente.telefono.includes(searchValue)) ||
+                (cliente.email && cliente.email.toLowerCase().includes(searchValue))
+            );
+        });
+        
+        currentPage = 1;
+        displayClients(filteredClients);
+    }
+    
+    // Función para abrir modal de agregar cliente
+    function openAddClientModal() {
+        document.getElementById('modalTitle').textContent = 'Agregar Nuevo Cliente';
+        document.getElementById('clientId').value = '';
+        document.getElementById('clientForm').reset();
+        document.getElementById('saveClientBtn').onclick = saveNewClient;
+        
+        openModal('clientModal');
+    }
+    
+    // Función para editar cliente
+    function editClient(clientId) {
+        const cliente = clientes.find(c => c.id === clientId);
+        if (!cliente) return;
+        
+        document.getElementById('modalTitle').textContent = 'Editar Cliente';
+        document.getElementById('clientId').value = cliente.id;
+        document.getElementById('clientName').value = cliente.nombre;
+        document.getElementById('clientPhone').value = cliente.telefono || '';
+        document.getElementById('clientEmail').value = cliente.email || '';
+        document.getElementById('clientBirthday').value = cliente.fechaNacimiento || '';
+        document.getElementById('clientAddress').value = cliente.direccion || '';
+        document.getElementById('clientNotes').value = cliente.notas || '';
+        
+        // Seleccionar días preferidos
+        const diasSelect = document.getElementById('preferredDays');
+        for (let i = 0; i < diasSelect.options.length; i++) {
+            diasSelect.options[i].selected = cliente.diasPreferidos?.includes(diasSelect.options[i].value);
+        }
+        
+        // Seleccionar servicios preferidos
+        const serviciosSelect = document.getElementById('preferredServices');
+        for (let i = 0; i < serviciosSelect.options.length; i++) {
+            serviciosSelect.options[i].selected = cliente.serviciosPreferidos?.includes(serviciosSelect.options[i].value);
+        }
+        
+        document.getElementById('saveClientBtn').onclick = updateClient;
+        
+        openModal('clientModal');
+    }
+    
+    // Función para guardar nuevo cliente
+    function saveNewClient() {
+        const newClient = {
+            id: clientes.length > 0 ? Math.max(...clientes.map(c => c.id)) + 1 : 1,
+            nombre: document.getElementById('clientName').value,
+            telefono: document.getElementById('clientPhone').value,
+            email: document.getElementById('clientEmail').value,
+            fechaNacimiento: document.getElementById('clientBirthday').value,
+            direccion: document.getElementById('clientAddress').value,
+            diasPreferidos: getSelectedOptions('preferredDays'),
+            serviciosPreferidos: getSelectedOptions('preferredServices'),
+            notas: document.getElementById('clientNotes').value,
+            visitas: 0,
+            ultimaVisita: new Date().toISOString().split('T')[0],
+            gastoTotal: 0,
+            historial: [],
+            proximasCitas: []
+        };
+        
+        if (!newClient.nombre.trim()) {
+            alert('El nombre del cliente es obligatorio');
+            return;
+        }
+        
+        clientes.push(newClient);
+        closeModal('clientModal');
+        updateDashboard();
+        displayClients();
+        displayBirthdays();
+        displayInactiveClients();
+        
+        alert('Cliente agregado exitosamente');
+    }
+    
+    // Función para actualizar cliente
+    function updateClient() {
+        const clientId = parseInt(document.getElementById('clientId').value);
+        const clientIndex = clientes.findIndex(c => c.id === clientId);
+        
+        if (clientIndex === -1) return;
+        
+        const updatedClient = {
+            ...clientes[clientIndex],
+            nombre: document.getElementById('clientName').value,
+            telefono: document.getElementById('clientPhone').value,
+            email: document.getElementById('clientEmail').value,
+            fechaNacimiento: document.getElementById('clientBirthday').value,
+            direccion: document.getElementById('clientAddress').value,
+            diasPreferidos: getSelectedOptions('preferredDays'),
+            serviciosPreferidos: getSelectedOptions('preferredServices'),
+            notas: document.getElementById('clientNotes').value
+        };
+        
+        if (!updatedClient.nombre.trim()) {
+            alert('El nombre del cliente es obligatorio');
+            return;
+        }
+        
+        clientes[clientIndex] = updatedClient;
+        closeModal('clientModal');
+        displayClients();
+        displayBirthdays();
+        displayInactiveClients();
+        
+        // Si el modal de detalles estaba abierto, actualizar también ese
+        if (currentClientId === clientId) {
+            viewClientDetails(clientId);
+        }
+        
+        alert('Cliente actualizado exitosamente');
+    }
+    
+    // Función para confirmar eliminación de cliente
+    function confirmDeleteClient(clientId) {
+        if (confirm('¿Está seguro que desea eliminar este cliente? Esta acción no se puede deshacer.')) {
+            deleteClient(clientId);
+        }
+    }
+    
+    // Función para eliminar cliente
+    function deleteClient(clientId) {
+        const clientIndex = clientes.findIndex(c => c.id === clientId);
+        
+        if (clientIndex !== -1) {
+            clientes.splice(clientIndex, 1);
+            updateDashboard();
+            displayClients();
+            displayBirthdays();
+            displayInactiveClients();
+            
+            alert('Cliente eliminado exitosamente');
+        }
+    }
+    
+    // Función para ver detalles del cliente
+    function viewClientDetails(clientId) {
+        const cliente = clientes.find(c => c.id === clientId);
+        if (!cliente) return;
+        
+        currentClientId = clientId;
+        
+        // Llenar información básica
+        document.getElementById('clientDetailName').textContent = cliente.nombre;
+        document.getElementById('detailPhone').textContent = cliente.telefono || 'No registrado';
+        document.getElementById('detailEmail').textContent = cliente.email || 'No registrado';
+        
+        // Formatear fecha de nacimiento
+        let birthdayText = 'No registrado';
+        if (cliente.fechaNacimiento) {
+            const birthDate = new Date(cliente.fechaNacimiento);
+            birthdayText = birthDate.toLocaleDateString('es-AR');
+        }
+        document.getElementById('detailBirthday').textContent = birthdayText;
+        
+        document.getElementById('detailAddress').textContent = cliente.direccion || 'No registrado';
+        document.getElementById('detailVisits').textContent = cliente.visitas;
+        document.getElementById('detailSpending').textContent = `$${cliente.gastoTotal}`;
+        document.getElementById('detailDays').textContent = cliente.diasPreferidos?.join(', ') || 'No especificado';
+        document.getElementById('detailServices').textContent = cliente.serviciosPreferidos?.join(', ') || 'No especificado';
+        
+        // Llenar historial de servicios
+        const historyContainer = document.getElementById('serviceHistory');
+        historyContainer.innerHTML = '';
+        
+        if (cliente.historial && cliente.historial.length > 0) {
+            // Ordenar historial por fecha (más reciente primero)
+            const sortedHistory = [...cliente.historial].sort((a, b) => {
+                return new Date(b.fecha) - new Date(a.fecha);
+            });
+            
+            sortedHistory.forEach(visita => {
+                const visitaDate = new Date(visita.fecha);
+                const formattedDate = visitaDate.toLocaleDateString('es-AR');
+                
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <div class="history-date">${formattedDate}</div>
+                    <div class="history-service"><strong>${visita.servicio}</strong> - $${visita.costo}</div>
+                    <div class="history-notes">${visita.notas || 'Sin notas adicionales'}</div>
+                `;
+                
+                historyContainer.appendChild(historyItem);
+            });
+        } else {
+            historyContainer.innerHTML = '<p>Este cliente no tiene historial de servicios.</p>';
+        }
+        
+        // Llenar notas
+        const notesContainer = document.getElementById('clientNotesDisplay');
+        notesContainer.textContent = cliente.notas || 'No hay notas registradas para este cliente.';
+        
+        // Llenar próximas citas
+        const appointmentsContainer = document.getElementById('upcomingAppointments');
+        appointmentsContainer.innerHTML = '';
+        
+        if (cliente.proximasCitas && cliente.proximasCitas.length > 0) {
+            // Ordenar citas por fecha (más próxima primero)
+            const sortedAppointments = [...cliente.proximasCitas].sort((a, b) => {
+                return new Date(a.fecha) - new Date(b.fecha);
+            });
+            
+            sortedAppointments.forEach(cita => {
+                const citaDate = new Date(cita.fecha);
+                const formattedDate = citaDate.toLocaleDateString('es-AR');
+                
+                const appointmentItem = document.createElement('div');
+                appointmentItem.className = 'history-item';
+                appointmentItem.innerHTML = `
+                    <div class="history-date">${formattedDate} ${cita.hora}</div>
+                    <div class="history-service"><strong>${cita.servicio}</strong></div>
+                    <div class="btn-group" style="justify-content: flex-start; margin-top: 10px;">
+                        <button class="btn btn-light" onclick="cancelAppointment(${clientId}, '${cita.fecha}', '${cita.hora}')">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                        <button class="btn btn-primary" onclick="modifyAppointment(${clientId}, '${cita.fecha}', '${cita.hora}')">
+                            <i class="fas fa-edit"></i> Modificar
+                        </button>
+                    </div>
+                `;
+                
+                appointmentsContainer.appendChild(appointmentItem);
+            });
+        } else {
+            appointmentsContainer.innerHTML = '<p>Este cliente no tiene citas programadas.</p>';
+        }
+        
+        // Mostrar la primera pestaña de detalles por defecto
+        switchDetailTab('historyTab');
+        
+        openModal('detailsModal');
+    }
+    
+    // Función para obtener los valores seleccionados de un select múltiple
+    function getSelectedOptions(selectId) {
+        const select = document.getElementById(selectId);
+        const values = [];
+        
+        for (let i = 0; i < select.options.length; i++) {
+            if (select.options[i].selected) {
+                values.push(select.options[i].value);
+            }
+        }
+        
+        return values;
+    }
+    
+    // Funciones para enviar mensaje de cumpleaños
+    function sendBirthdayMessage(clientId) {
+        const cliente = clientes.find(c => c.id === clientId);
+        if (!cliente) return;
+        
+        alert(`Se enviará una felicitación de cumpleaños a ${cliente.nombre} al número ${cliente.telefono}`);
+        // Aquí se podría integrar con API de WhatsApp o sistema de mensajería
+    }
+    
+    // Función para contactar cliente inactivo
+    function contactInactiveClient(clientId) {
+        const cliente = clientes.find(c => c.id === clientId);
+        if (!cliente) return;
+        
+        alert(`Se contactará a ${cliente.nombre} al número ${cliente.telefono} para ofrecer promociones`);
+        // Aquí se podría integrar con API de WhatsApp o sistema de mensajería
+    }
+    
+    // Función para programar una cita
+    function scheduleAppointment() {
+        // Aquí se implementaría la lógica para programar una cita
+        alert('Funcionalidad para programar cita. Esta característica se conectaría con el sistema de reservas.');
+        
+        // Se podría abrir otro modal o redireccionar a la página de reservas
+        // window.location.href = 'reservation.html?client=' + currentClientId;
+    }
+    
+    // Función para cancelar una cita
+    function cancelAppointment(clientId, fecha, hora) {
+        const cliente = clientes.find(c => c.id === clientId);
+        if (!cliente) return;
+        
+        if (confirm('¿Está seguro que desea cancelar esta cita?')) {
+            // Eliminar la cita del cliente
+            cliente.proximasCitas = cliente.proximasCitas.filter(cita => {
+                return !(cita.fecha === fecha && cita.hora === hora);
+            });
+            
+            viewClientDetails(clientId); // Actualizar la vista de detalles
+            alert('Cita cancelada exitosamente');
+        }
+    }
+    
+    // Función para modificar una cita
+    function modifyAppointment(clientId, fecha, hora) {
+        alert('Funcionalidad para modificar cita. Se conectaría con el sistema de reservas.');
+        // Aquí se implementaría la lógica para modificar una cita
+    }
+    
+    // Función para cambiar entre tabs
+    function switchTab(tabId) {
+        // Desactivar todas las tabs y contenidos activos
+        document.querySelectorAll('.tabs .tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+        
+        // Activar la tab y contenido seleccionado
+        const selectedTab = document.querySelector(`.tabs .tab[onclick="switchTab('${tabId}')"]`);
+        if (selectedTab) selectedTab.classList.add('active');
+        
+        const selectedContent = document.getElementById(tabId);
+        if (selectedContent) selectedContent.classList.add('active');
+    }
+    
+    // Función para cambiar entre tabs en la vista de detalles
+    // Función para cambiar entre tabs en la vista de detalles
+function switchDetailTab(tabId) {
+    // Desactivar todas las tabs y contenidos activos dentro de la vista de detalles
+    document.querySelectorAll('.tabs-details .tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    document.querySelectorAll('.tabs-details .tab-content').forEach(content => {
+        content.classList.remove('active');
+    });
+    
+    // Activar la tab y contenido seleccionado
+    const selectedTab = document.querySelector(`.tabs-details .tab[onclick="switchDetailTab('${tabId}')"]`);
+    if (selectedTab) selectedTab.classList.add('active');
+    
+    const selectedContent = document.getElementById(tabId);
+    if (selectedContent) selectedContent.classList.add('active');
+}
+
+// Función para agregar nota al cliente
+function addClientNote() {
+    const cliente = clientes.find(c => c.id === currentClientId);
+    if (!cliente) return;
+    
+    const newNote = document.getElementById('newNote').value.trim();
+    
+    if (!newNote) {
+        alert('Por favor ingrese una nota válida');
+        return;
+    }
+    
+    // Agregar la nueva nota al inicio de las notas existentes
+    if (!cliente.notas) {
+        cliente.notas = newNote;
+    } else {
+        cliente.notas = newNote + '\n\n' + cliente.notas;
+    }
+    
+    // Actualizar la visualización de notas
+    document.getElementById('clientNotesDisplay').textContent = cliente.notas;
+    document.getElementById('newNote').value = '';
+    
+    alert('Nota agregada exitosamente');
+}
+
+// Función para abrir un modal
+function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'flex';
+    }
+}
+
+// Función para cerrar un modal
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// Event listener para cerrar el modal al hacer clic fuera
+window.addEventListener('click', function(event) {
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+});
+
+// Mostrar la fecha actual
+function showCurrentDate() {
+    const today = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = today.toLocaleDateString('es-AR', options);
+    
+    // Capitalizar la primera letra
+    const capitalizedDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+    
+    document.getElementById('currentDate').textContent = capitalizedDate;
+}
+
+// Configurar datos de usuario
+function setupUserData() {
+    // Simulación de usuario conectado
+    const username = "Administrador";
+    document.getElementById('usernameDisplay').textContent = username;
+}
+
+// Event listeners para filtros
+document.addEventListener('DOMContentLoaded', function() {
+    if (document.getElementById('filterVisits')) {
+        document.getElementById('filterVisits').addEventListener('change', filterClients);
+    }
+    
+    if (document.getElementById('filterServices')) {
+        document.getElementById('filterServices').addEventListener('change', filterClients);
+    }
+    
+    // Inicializar datos
+    initializeDemoData();
+    showCurrentDate();
+    setupUserData();
+});
+
+// Función para filtrar clientes
+function filterClients() {
+    const visitFilter = document.getElementById('filterVisits').value;
+    const serviceFilter = document.getElementById('filterServices').value;
+    
+    const today = new Date();
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(today.getDate() - 30);
+    
+    let filteredClients = [...clientes];
+    
+    // Filtrar por visitas
+    if (visitFilter === 'recent') {
+        filteredClients = filteredClients.filter(cliente => {
+            const ultimaVisitaDate = new Date(cliente.ultimaVisita);
+            return ultimaVisitaDate >= thirtyDaysAgo;
+        });
+    } else if (visitFilter === 'inactive') {
+        filteredClients = filteredClients.filter(cliente => {
+            const ultimaVisitaDate = new Date(cliente.ultimaVisita);
+            return ultimaVisitaDate < thirtyDaysAgo;
+        });
+    }
+    
+    // Filtrar por servicio
+    if (serviceFilter !== 'all') {
+        filteredClients = filteredClients.filter(cliente => {
+            return cliente.serviciosPreferidos?.includes(serviceFilter);
+        });
+    }
+    
+    // Resetear la página actual y mostrar los resultados
+    currentPage = 1;
+    displayClients(filteredClients);
+}
+
+// Función para ordenar la tabla de clientes
+function sortTable(column) {
+    // Implementación futura: ordenar la tabla por columna
+    console.log(`Ordenando por la columna: ${column}`);
+    
+    // Aquí iría el código para ordenar los clientes por la columna seleccionada
+    // Por ahora solo actualizamos la visualización
+    displayClients();
+}

@@ -1,0 +1,78 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    color: #333;
+}
+
+header nav ul {
+    display: flex;
+    justify-content: space-around;
+    background-color: #f5a7c0;
+    padding: 1rem;
+}
+
+header nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+}
+
+.admin-section {
+    padding: 2rem;
+}
+
+.calendar-container, .reservations-table {
+    margin-bottom: 2rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.status.reservado {
+    background-color: #f44336;
+    color: white;
+}
+
+.status.disponible {
+    background-color: #4caf50;
+    color: white;
+}
+
+.btn-edit {
+    background-color: #ff9800;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.modify-reservation {
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    margin-top: 2rem;
+    width: 300px;
+}
+
+.btn-submit {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

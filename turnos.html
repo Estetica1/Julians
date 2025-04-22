@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservar Turno - Estética Tortuguitas</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="turnos.css"> <!-- Archivo CSS adicional -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="active">HOME</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="adminturno.html">Ver Turnos</a></li>
+                <li><a href="promocion.html">Ver Promociones</a></li>
+                <li><a href="clientes.html">Control de Clientes</a></li>
+                <li><a href="finanzas.html">Finanzas</a></li>
+                <li><a href="turnos.html">Reservar Turno</a></li>
+                <li><a href="estetica/index.html">LOGIN</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Sección de Reserva -->
+    <section id="reservation" class="reservation-section">
+        <h1>Reserva tu Turno</h1>
+        <p class="reservation-description">Selecciona el servicio, fecha y hora que más te convenga, y completa los datos para confirmar tu turno.</p>
+        
+        <!-- Formulario de reserva -->
+        <form id="bookingForm">
+            <div class="form-group">
+                <label for="service">Selecciona el Servicio:</label>
+                <select id="service" name="service" required>
+                    <option value="masajes" data-duration="30" data-price="2000">Masajes (30 minutos) - $2000</option>
+                    <option value="manicura" data-duration="30" data-price="800">Manicura (30 minutos) - $800</option>
+                    <option value="limpieza_facial" data-duration="30" data-price="1200">Limpieza Facial (30 minutos) - $1200</option>
+                    <option value="depilacion" data-duration="60" data-price="1500">Depilación (1 hora) - $1500</option>
+                </select>
+            </div>
+
+            <!-- Calendario para seleccionar fecha -->
+            <div class="form-group">
+                <label for="date">Selecciona la Fecha:</label>
+                <input type="text" id="date" name="date" class="datepicker" required>
+            </div>
+
+            <!-- Horario disponible -->
+            <div class="form-group">
+                <label for="time">Selecciona la Hora:</label>
+                <select id="time" name="time" required>
+                    <!-- Opciones de hora se cargarán dinámicamente -->
+                </select>
+            </div>
+
+            <!-- Datos del Cliente -->
+            <div class="form-group">
+                <label for="name">Nombre:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Correo Electrónico:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Teléfono:</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" id="submitBooking" class="btn-book">Ver Resumen</button>
+            </div>
+        </form>
+
+        <!-- Resumen de la reserva -->
+        <div id="bookingSummary" class="booking-summary" style="display: none;">
+            <h2>Resumen de tu Reserva</h2>
+            <p id="summaryDetails">Por favor selecciona todos los campos para ver el resumen de tu reserva.</p>
+            
+            <!-- Botón de Confirmación -->
+            <div id="confirmBookingContainer" style="display: none;">
+                <button id="confirmBooking" class="btn-book">Confirmar Compra</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Estética Tortuguitas. Todos los derechos reservados.</p>
+        <p>Ubicación: Tortuguitas, Argentina | Email: contacto@estetica.com | Teléfono: 1234-5678</p>
+    </footer>
+
+    <script>
+        // Configuración de Flatpickr para el calendario
+        flatpickr("#date", {
+            minDate: "today", // No permitir fechas pasadas
+            enableTime: false, // Solo fecha, no hora
+            dateFormat: "Y-m-d", // Formato de la fecha
+            onChange: function(selectedDates, dateStr, instance) {
+                loadAvailableTimes(dateStr); // Cargar los horarios disponibles cuando se seleccione una fecha
+            }
+        });
+
+        // Horarios disponibles por día (ejemplo)
+        const availableTimes = {
+            "masajes": {
+                "30": ["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30"],
+            },
+            "depilacion": {
+                "60": ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"],
+            }
+        };
+
+        // Función para cargar los horarios disponibles según la fecha seleccionada
+        function loadAvailableTimes(date) {
+            const selectedService = $("#service").val();
+            const duration = $("#service option:selected").data("duration");
+            const availableHours = availableTimes[selectedService][duration];
+
+            const timeSelect = $("#time");
+            timeSelect.empty(); // Limpiar opciones previas
+
+            if (availableHours) {
+                availableHours.forEach(function(hour) {
+                    const option = $("<option>").val(hour).text(hour);
+                    timeSelect.append(option);
+                });
+            }
+        }
+
+        // Actualizar resumen de la reserva
+        $('#bookingForm').on('submit', function(e) {
+            e.preventDefault();
+            const service = $('#service').val();
+            const date = $('#date').val();
+            const time = $('#time').val();
+            const name = $('#name').val();
+            const email = $('#email').val();
+            const phone = $('#phone').val();
+
+            const serviceText = $("#service option:selected").text();
+            const price = $("#service option:selected").data("price");
+
+            const summary = `
+                <p>Servicio: ${serviceText}</p>
+                <p>Fecha: ${date}</p>
+                <p>Hora: ${time}</p>
+                <p>Nombre: ${name}</p>
+                <p>Email: ${email}</p>
+                <p>Teléfono: ${phone}</p>
+                <p>Total a Pagar: $${price}</p>
+            `;
+
+            $("#summaryDetails").html(summary);
+            $("#bookingSummary").show(); // Mostrar el resumen
+            $("#confirmBookingContainer").show(); // Mostrar el botón de confirmar compra
+        });
+
+        // Confirmar compra y redirigir al inicio
+        $('#confirmBooking').on('click', function() {
+            // Redirigir al inicio después de la compra
+            window.location.href = 'index.html'; // Redirige al inicio
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrador - Estética Tortuguitas</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="adminturno.css"> <!-- Archivo CSS adicional -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> <!-- Para el calendario -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="active">HOME</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="adminturno.html">Ver Turnos</a></li>
+                <li><a href="promocion.html">Ver Promociones</a></li>
+                <li><a href="clientes.html">Control de Clientes</a></li>
+                <li><a href="finanzas.html">Finanzas</a></li>
+                <li><a href="turnos.html">Reservar Turno</a></li>
+                <li><a href="estetica/index.html">LOGIN</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Sección Administrador -->
+    <section id="admin" class="admin-section">
+        <h1>Gestión de Turnos - Administrador</h1>
+        
+        <div class="admin-container">
+            <!-- Calendario para seleccionar la fecha -->
+            <div class="calendar-container">
+                <h2>Selecciona la Fecha:</h2>
+                <input type="text" id="adminDate" class="datepicker" placeholder="Selecciona una fecha" required>
+            </div>
+
+            <!-- Tabla de Reservas -->
+            <div class="reservations-table">
+                <h2>Turnos Disponibles</h2>
+                <table id="reservationsTable">
+                    <thead>
+                        <tr>
+                            <th>Hora</th>
+                            <th>Servicio</th>
+                            <th>Cliente</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Las filas se generarán dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Modificar Reserva -->
+        <div id="modifyReservation" class="modify-reservation" style="display: none;">
+            <h3>Modificar Reserva</h3>
+            <form id="modifyForm">
+                <div class="form-group">
+                    <label for="modifyStatus">Estado de la Reserva:</label>
+                    <select id="modifyStatus" name="status">
+                        <option value="reservado">Reservado</option>
+                        <option value="disponible">Disponible</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn-submit">Actualizar Estado</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Estética Tortuguitas. Todos los derechos reservados.</p>
+        <p>Ubicación: Tortuguitas, Argentina | Email: contacto@estetica.com | Teléfono: 1234-5678</p>
+    </footer>
+
+    <script>
+        // Configuración de Flatpickr para el calendario
+        flatpickr("#adminDate", {
+            minDate: "today", // No permitir fechas pasadas
+            enableTime: false, // Solo fecha
+            dateFormat: "Y-m-d", // Formato de la fecha
+            onChange: function(selectedDates, dateStr, instance) {
+                loadReservations(dateStr); // Cargar las reservas cuando se seleccione una fecha
+            }
+        });
+
+        // Función para cargar las reservas del día seleccionado
+        function loadReservations(date) {
+            $.ajax({
+                url: 'get_reservations.php', // Este archivo PHP obtiene las reservas desde la base de datos
+                method: 'GET',
+                data: { date: date },
+                success: function(data) {
+                    const reservations = JSON.parse(data);
+                    const tableBody = $("#reservationsTable tbody");
+                    tableBody.empty(); // Limpiar la tabla
+
+                    reservations.forEach(reservation => {
+                        const row = `<tr>
+                            <td>${reservation.time}</td>
+                            <td>${reservation.service}</td>
+                            <td>${reservation.client}</td>
+                            <td><span class="status ${reservation.status}">${reservation.status}</span></td>
+                            <td><button class="btn-edit" data-id="${reservation.id}" data-time="${reservation.time}" data-service="${reservation.service}" data-client="${reservation.client}" data-status="${reservation.status}">Editar</button></td>
+                        </tr>`;
+                        tableBody.append(row);
+                    });
+                }
+            });
+        }
+
+        // Mostrar el formulario de modificación de reserva
+        $(document).on('click', '.btn-edit', function() {
+            const id = $(this).data('id');
+            const time = $(this).data('time');
+            const service = $(this).data('service');
+            const client = $(this).data('client');
+            const status = $(this).data('status');
+
+            $('#modifyStatus').val(status);
+            $('#modifyReservation').show();
+
+            $('#modifyForm').on('submit', function(e) {
+                e.preventDefault();
+                const newStatus = $('#modifyStatus').val();
+                // Enviar la actualización al servidor para cambiar el estado de la reserva
+                $.ajax({
+                    url: 'update_reservation.php', // Este archivo PHP actualiza el estado de la reserva en la base de datos
+                    method: 'POST',
+                    data: { id: id, status: newStatus },
+                    success: function(response) {
+                        if (response === 'success') {
+                            alert(`Estado de la reserva de ${client} (${time} - ${service}) actualizado a ${newStatus}`);
+                            $('#modifyReservation').hide();
+                            loadReservations($('#adminDate').val()); // Recargar las reservas con el nuevo estado
+                        } else {
+                            alert('Hubo un error al actualizar la reserva. Intenta nuevamente.');
+                        }
+                    }
+                });
+            });
+        })
+    </script>
+</body>
+</html>

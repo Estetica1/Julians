@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios - Estética Tortuguitas</title>
+    <link rel="stylesheet" href="servicios.css">
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="active">HOME</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="adminturno.html">Ver Turnos</a></li>
+                <li><a href="promocion.html">Ver Promociones</a></li>
+                <li><a href="clientes.html">Control de Clientes</a></li>
+                <li><a href="finanzas.html">Finanzas</a></li>
+                <li><a href="turnos.html">Reservar Turno</a></li>
+                <li><a href="estetica/index.html">LOGIN</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero de servicios -->
+    <section class="services-hero">
+        <div class="services-hero-content">
+            <h1>Nuestros Servicios Profesionales</h1>
+            <p class="services-description">En Estética Tortuguitas ofrecemos una gama exclusiva de servicios para tu bienestar, con la mejor calidad y atención personalizada. Cada tratamiento está diseñado para brindarte una experiencia única.</p>
+        </div>
+    </section>
+
+    <!-- Sección de servicios -->
+    <section id="services" class="services-section">
+        <!-- Filtros de categorías -->
+        <div class="category-filters">
+            <button class="category-btn active">Todos</button>
+            <button class="category-btn">Faciales</button>
+            <button class="category-btn">Corporales</button>
+            <button class="category-btn">Manicura & Pedicura</button>
+            <button class="category-btn">Depilación</button>
+        </div>
+        
+        <!-- Tarjetas de servicios -->
+        <div class="service-cards">
+            <!-- Tarjeta de Masajes -->
+            <div class="service-card">
+                <div class="service-img-container">
+                    <img src="Julians/estetica/facial.webp" alt="Tratamientos faciales" style="width: 100%; height: 100%">
+                    <span class="service-tag">Más Popular</span>
+                </div>
+                <div class="service-content">
+                    <h2>Masajes Relajantes</h2>
+                    <p>Disfruta de masajes relajantes que liberan tensiones, realizados por expertos masajistas que adaptarán el tratamiento a tus necesidades específicas.</p>
+                    <div class="service-price">
+                        <span class="original-price">$4500</span>
+                        $3600
+                    </div>
+                    <div class="card-bottom">
+                        <span class="duration">⏱️ 60 minutos</span>
+                        <button class="btn-book">Reservar Turno</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta de Masajes Descontracturantes -->
+            <div class="service-card">
+                <div class="service-img-container">
+                    <img src="Julians/estetica/masajes.jpg" alt="Masajes" style="width: 100%; height: 100%">
+                </div>
+                <div class="service-content">
+                    <h2>Masajes Descontracturantes</h2>
+                    <p>Técnica especializada para aliviar dolores musculares, contracturas y mejorar la movilidad. Ideal para quienes sufren tensión muscular.</p>
+                    <div class="service-price">
+                        $4800
+                    </div>
+                    <div class="card-bottom">
+                        <span class="duration">⏱️ 50 minutos</span>
+                        <button class="btn-book">Reservar Turno</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta de Manicura -->
+            <div class="service-card">
+                <div class="service-img-container">
+                    <img src="Julians/estetica/masajes.jpg" alt="Masajes" style="width: 100%; height: 100%">
+                </div>
+                <div class="service-content">
+                    <h2>Manicura Profesional</h2>
+                    <p>Realizamos manicuras clásicas, tratamientos hidratantes para manos y uñas decoradas con diseños exclusivos que durarán semanas.</p>
+                    <div class="service-price">
+                        <span class="original-price">$2800</span>
+                        $2200
+                    </div>
+                    <div class="card-bottom">
+                        <span class="duration">⏱️ 45 minutos</span>
+                        <button class="btn-book">Reservar Turno</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta de Limpieza Facial -->
+            <div class="service-card">
+                <div class="service-img-container">
+                    <img src="Julians/estetica/masajes.jpg" alt="Masajes" style="width: 100%; height: 100%">
+                    <span class="service-tag">Destacado</span>
+                </div>
+                <div class="service-content">
+                    <h2>Limpieza Facial Profunda</h2>
+                    <p>Te ayudamos a rejuvenecer tu piel con tratamientos faciales adaptados a tu tipo de piel. Incluye hidratación, exfoliación y limpieza profunda.</p>
+                    <div class="service-price">
+                        $3900
+                    </div>
+                    <div class="card-bottom">
+                        <span class="duration">⏱️ 75 minutos</span>
+                        <button class="btn-book">Reservar Turno</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta de Depilación -->
+            <div class="service-card">
+                <div class="service-img-container">
+                    <img src="Julians/estetica/depilacion.jpg" alt="Depilación" style="width: 100%; height: 100%">
+                </div>
+                <div class="service-content">
+                    <h2>Depilación con Cera</h2>
+                    <p>Ofrecemos depilación con cera tibia o caliente para una piel suave y libre de vello por más tiempo. Técnica cuidadosa y eficaz.</p>
+                    <div class="service-price">
+                        <span class="original-price">$3200</span>
+                        $2900
+                    </div>
+                    <div class="card-bottom">
+                        <span class="duration">⏱️ 30-60 minutos</span>
+                        <button class="btn-book">Reservar Turno</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta de Pedicura -->
+            <div class="service-card">
+                <div class="service-img-container">
+                    <img src="Julians/estetica/masajes.jpg" alt="Masajes" style="width: 100%; height: 100%">
+                </div>
+                <div class="service-content">
+                    <h2>Pedicura Spa</h2>
+                    <p>Tratamiento completo para pies que incluye baño de inmersión, exfoliación, limado, corte de uñas, masaje y esmaltado a elección.</p>
+                    <div class="service-price">
+                        $3100
+                    </div>
+                    <div class="card-bottom">
+                        <span class="duration">⏱️ 60 minutos</span>
+                        <button class="btn-book">Reservar Turno</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de beneficios -->
+    <section class="benefits-section">
+        <div class="benefits-container">
+            <div class="section-title">
+                <h2>¿Por qué elegirnos?</h2>
+                <p>Nuestro compromiso es brindarte la mejor experiencia en cada visita</p>
+            </div>
+            
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <!-- Icono -->
+                    </div>
+                    <h3>Profesionales Certificados</h3>
+                    <p>Nuestro equipo cuenta con amplia experiencia y formación especializada en cada servicio que ofrecemos.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <!-- Icono -->
+                    </div>
+                    <h3>Productos Premium</h3>
+                    <p>Utilizamos exclusivamente productos de alta calidad que cuidan tu piel y tu salud.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <!-- Icono -->
+                    </div>
+                    <h3>Ambiente Relajante</h3>
+                    <p>Nuestras instalaciones están diseñadas para brindarte tranquilidad y confort durante tu tratamiento.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <!-- Icono -->
+                    </div>
+                    <h3>Atención Personalizada</h3>
+                    <p>Adaptamos cada servicio a tus necesidades específicas para garantizar los mejores resultados.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de preguntas frecuentes -->
+    <section class="faq-section">
+        <div class="faq-container">
+            <div class="section-title">
+                <h2>Preguntas Frecuentes</h2>
+                <p>Resolvemos tus dudas sobre nuestros servicios</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3 class="faq-question">¿Es necesario reservar turno con anticipación?</h3>
+                <p class="faq-answer">Sí, recomendamos reservar con al menos 24 horas de anticipación para garantizar disponibilidad. Puedes hacerlo a través de nuestra web o por teléfono.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3 class="faq-question">¿Qué sucede si necesito cancelar mi cita?</h3>
+                <p class="faq-answer">Entendemos que pueden surgir imprevistos. Te pedimos que nos avises con al menos 4 horas de anticipación para reprogramar sin cargo adicional.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3 class="faq-question">¿Ofrecen tratamientos para hombres?</h3>
+                <p class="faq-answer">¡Por supuesto! Todos nuestros servicios están disponibles tanto para mujeres como para hombres, adaptados a las necesidades específicas de cada cliente.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3 class="faq-question">¿Cuánto tiempo debo esperar entre tratamientos faciales?</h3>
+                <p class="faq-answer">Depende del tipo de tratamiento y de tu tipo de piel. Generalmente recomendamos espacios de 3 a 4 semanas entre limpiezas faciales profundas.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section">
+        <div class="cta-container">
+            <h2>¿Listo para consentirte?</h2>
+            <p>Reserva tu cita ahora y disfruta de una experiencia única en Estética Tortuguitas</p>
+            <a href="turnos.html" class="btn-cta">Reservar mi turno</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-logo">
+                <h3>Estética Tortuguitas</h3>
+                <p>Tu espacio de belleza y bienestar donde el cuidado personal se convierte en una experiencia única.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Enlaces rápidos</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="servicios.html">Servicios</a></li>
+                    <li><a href="promocion.html">Promociones</a></li>
+                    <li><a href="turnos.html">Reservar turno</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h4>Contacto</h4>
+                <div class="contact-info">
+                    <p>Email: contacto@estetica.com</p>
+                </div>
+                <div class="contact-info">
+                    <p>Teléfono: 1234-5678</p>
+                </div>
+                <div class="contact-info">
+                    <p>Dirección: Av. Principal 123, Tortuguitas</p>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 Estética Tortuguitas. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>

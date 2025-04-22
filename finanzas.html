@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Financiero - Estética Belle</title>
+    <link rel="stylesheet" href="finanzas.css">
+</head>
+<body>
+    <header>
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="index.html" class="active">HOME</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="adminturno.html">Ver Turnos</a></li>
+                <li><a href="promocion.html">Ver Promociones</a></li>
+                <li><a href="clientes.html">Control de Clientes</a></li>
+                <li><a href="finanzas.html">Finanzas</a></li>
+                <li><a href="turnos.html">Reservar Turno</a></li>
+                <li><a href="estetica/index.html">LOGIN</a></li>
+                </ul>
+            </nav>
+        <div class="container">
+            <h1>Estética Belle - Sistema Financiero</h1>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="dashboard">
+            <div class="sidebar">
+                <h2>Resumen del Mes</h2>
+                <div class="service-item">
+                    <span>Ingresos totales</span>
+                    <span class="income">$48,750</span>
+                </div>
+                <div class="service-item">
+                    <span>Gastos totales</span>
+                    <span class="expense">$21,340</span>
+                </div>
+                <div class="service-item">
+                    <span>Beneficio neto</span>
+                    <span class="profit">$27,410</span>
+                </div>
+                
+                <h2 style="margin-top: 2rem;">Servicios Populares</h2>
+                <div class="services-list">
+                    <div class="service-item">
+                        <span>Tratamiento facial</span>
+                        <span>32%</span>
+                    </div>
+                    <div class="service-item">
+                        <span>Manicura</span>
+                        <span>24%</span>
+                    </div>
+                    <div class="service-item">
+                        <span>Masajes</span>
+                        <span>18%</span>
+                    </div>
+                    <div class="service-item">
+                        <span>Depilación</span>
+                        <span>15%</span>
+                    </div>
+                    <div class="service-item">
+                        <span>Otros</span>
+                        <span>11%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="main-content">
+                <div class="date-selector">
+                    <button class="btn">&lt; Semana anterior</button>
+                    <span class="date-display">15 - 21 Abril, 2025</span>
+                    <button class="btn">Semana siguiente &gt;</button>
+                </div>
+                
+                <div class="summary-cards">
+                    <div class="card">
+                        <h3>Ingresos Semanales</h3>
+                        <div class="amount income">$12,450</div>
+                    </div>
+                    <div class="card">
+                        <h3>Gastos Semanales</h3>
+                        <div class="amount expense">$5,320</div>
+                    </div>
+                    <div class="card">
+                        <h3>Beneficio Neto</h3>
+                        <div class="amount profit">$7,130</div>
+                    </div>
+                </div>
+                
+                <h2>Análisis Diario</h2>
+                
+                <div class="chart-container">
+                    <div class="chart-bar">
+                        <div class="day-bar">
+                            <div class="bar-income" style="height: 60%"></div>
+                            <div class="bar-expense" style="height: 30%"></div>
+                            <div class="day-label">Lun</div>
+                        </div>
+                        <div class="day-bar">
+                            <div class="bar-income" style="height: 45%"></div>
+                            <div class="bar-expense" style="height: 25%"></div>
+                            <div class="day-label">Mar</div>
+                        </div>
+                        <div class="day-bar">
+                            <div class="bar-income" style="height: 75%"></div>
+                            <div class="bar-expense" style="height: 35%"></div>
+                            <div class="day-label">Mie</div>
+                        </div>
+                        <div class="day-bar">
+                            <div class="bar-income" style="height: 50%"></div>
+                            <div class="bar-expense" style="height: 20%"></div>
+                            <div class="day-label">Jue</div>
+                        </div>
+                        <div class="day-bar">
+                            <div class="bar-income" style="height: 90%"></div>
+                            <div class="bar-expense" style="height: 40%"></div>
+                            <div class="day-label">Vie</div>
+                        </div>
+                        <div class="day-bar">
+                            <div class="bar-income" style="height: 100%"></div>
+                            <div class="bar-expense" style="height: 45%"></div>
+                            <div class="day-label">Sab</div>
+                        </div>
+                        <div class="day-bar">
+                            <div class="bar-income" style="height: 20%"></div>
+                            <div class="bar-expense" style="height: 15%"></div>
+                            <div class="day-label">Dom</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <div class="legend-color legend-income"></div>
+                        <span>Ingresos</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color legend-expense"></div>
+                        <span>Gastos</span>
+                    </div>
+                </div>
+                
+                <h2>Detalles Financieros Diarios</h2>
+                
+                <div class="filter-controls">
+                    <select>
+                        <option>Todos los servicios</option>
+                        <option>Tratamiento facial</option>
+                        <option>Manicura</option>
+                        <option>Masajes</option>
+                        <option>Depilación</option>
+                    </select>
+                    <input type="date" value="2025-04-21">
+                </div>
+                
+                <table class="financial-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Servicio</th>
+                            <th>Ingresos</th>
+                            <th>Gastos</th>
+                            <th>Beneficio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>21/04/2025</td>
+                            <td>Tratamiento facial</td>
+                            <td class="income">$2,400</td>
+                            <td class="expense">$950</td>
+                            <td class="profit">$1,450</td>
+                        </tr>
+                        <tr>
+                            <td>20/04/2025</td>
+                            <td>Manicura</td>
+                            <td class="income">$1,800</td>
+                            <td class="expense">$680</td>
+                            <td class="profit">$1,120</td>
+                        </tr>
+                        <tr>
+                            <td>20/04/2025</td>
+                            <td>Masajes</td>
+                            <td class="income">$3,200</td>
+                            <td class="expense">$1,250</td>
+                            <td class="profit">$1,950</td>
+                        </tr>
+                        <tr>
+                            <td>19/04/2025</td>
+                            <td>Depilación</td>
+                            <td class="income">$1,950</td>
+                            <td class="expense">$720</td>
+                            <td class="profit">$1,230</td>
+                        </tr>
+                        <tr>
+                            <td>19/04/2025</td>
+                            <td>Tratamiento facial</td>
+                            <td class="income">$1,750</td>
+                            <td class="expense">$680</td>
+                            <td class="profit">$1,070</td>
+                        </tr>
+                        <tr>
+                            <td>18/04/2025</td>
+                            <td>Masajes</td>
+                            <td class="income">$1,350</td>
+                            <td class="expense">$520</td>
+                            <td class="profit">$830</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-outline">Exportar PDF</button>
+                    <button class="btn">Ver más detalles</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>© 2025 Estética Belle - Sistema de Gestión Financiera</p>
+        </div>
+    </footer>
+</body>
+</html>
